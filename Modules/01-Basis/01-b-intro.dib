@@ -6,10 +6,20 @@
 
 # Git basis - 01 - introductie
 
+#!markdown
+
+## Inleiding
+
+#!markdown
+
 Welkom bij de introductie van de Git basis training
 Je kunt deze oefeningen en voorbeelden zelf uitvoeren in VSCode met de interactieve code blokken of je Terminal gebruiken als je dit prettiger vind.
 
+#!markdown
+
 ## Benodigdheden
+
+#!markdown
 
 Om deze cursus zo optimaal te kunnen doen, heb je de volgende zaken nodig:
 
@@ -25,6 +35,7 @@ Om deze cursus zo optimaal te kunnen doen, heb je de volgende zaken nodig:
   - [PowerShell](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
   - [Polygot Notebooks](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.dotnet-interactive-vscode) - voor het gebruiken van Polygot interactieve notebooks, zoals dit bestand.
 
+#!markdown
 
 ### Optioneel
 
@@ -33,15 +44,17 @@ Om deze cursus zo optimaal te kunnen doen, heb je de volgende zaken nodig:
 - [Windows Terminal](https://learn.microsoft.com/en-us/windows/terminal/install) - Deze maakt het gebruik van shells prettiger met custom fonts and veel customization options.
 - [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) - Git blame annotations, CodeLens, etc.
 
-## Als je alle benodigdheden hebt, kunnen we beginnen!
-
 #!markdown
 
 > **Ter Info**: Veel van de PowerShell commando's hieronder eindigen met `Out-String`. Dit is gedaan omdat de PowerShell output in een Polygot notebook anders is dan in een console sessie. Door de Out-String lijkt de output veel meer zoals deze in een console er zou uitzien. Je hoeft dus in de console geen pipe naar `Out-String` te doen.
 
 #!markdown
 
-## **Oefening 1:** git werking controleren
+Als je alle benodigdheden hebt, kunnen we beginnen!
+
+#!markdown
+
+## Oefening 1: git werking controleren
 
 #!pwsh
 
@@ -57,7 +70,9 @@ git version 2.xx.x.windows.1
 
 #!markdown
 
-## **Oefening 2:** nieuwe lege map maken
+## Oefening 2: nieuwe lege map maken
+
+#!markdown
 
 We beginnen met het aanmaken van een lege map op onze computer om te gebruiken als git repository. Je kunt dit natuurlijk doen met explorer, of je gebruikt natuurlijk PowerShell.
 
@@ -78,7 +93,9 @@ Deze map is volledig leeg, we gaan dit controleren door een dir van deze map te 
 
 #!markdown
 
-## **Oefening 3:** Folder initialiseren als een git-repository
+## Oefening 3: Folder initialiseren als een git-repository
+
+#!markdown
 
 Git maakt gebruik van een lokale folder de je initialiseert als repository. Vanaf dat moment houdt git alle wijzigingen bij in deze folder.
 We gaan dit doen met de net aangemaakt GitTraining folder
@@ -93,7 +110,7 @@ git init | Out-String
 
 #!markdown
 
-## **Oefening 4:** Controleren git initialisatie
+## Oefening 4: Controleren git initialisatie
 
 #!markdown
 
@@ -134,7 +151,9 @@ Get-ChildItem -Path 'C:\GitTraining' -Force -Recurse | Sort-Object FullName | Se
 
 #!markdown
 
-## **Oefening 5:** Git status
+## Oefening 5: Git status
+
+#!markdown
 
 Eén van de meest gebruikte commando's waar je eigenlijk altijd mee zou moeten beginnen als je in een repository werkt is `git status`
 
@@ -146,4 +165,4 @@ git status
 
 #!markdown
 
-## Einde les 01
+## _Einde les 01_
