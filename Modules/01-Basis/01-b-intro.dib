@@ -1,0 +1,149 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!markdown
+
+# Git basis - 01 - introductie
+
+Welkom bij de introductie van de Git basis training
+Je kunt deze oefeningen en voorbeelden zelf uitvoeren in VSCode met de interactieve code blokken of je Terminal gebruiken als je dit prettiger vind.
+
+## Benodigdheden
+
+Om deze cursus zo optimaal te kunnen doen, heb je de volgende zaken nodig:
+
+- [Git for Windows (versie 2.51.0 of hoger)](https://git-scm.com/downloads/win)
+  - > Tip: gebruik winget om de laatste versie te installeren: `winget install --id Git.Git`
+- [PowerShell 7](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.5)
+  - `winget install --id Microsoft.PowerShell --exact`
+- [VSCode](https://code.visualstudio.com/download)
+  - `winget install --id Microsoft.VisualStudioCode`
+- [Microsoft .NET SDK 9.0]() - voor het gebruiken van Polygot interactieve notebooks, zoals dit bestand.
+  - `winget install --id Microsoft .NET SDK 9.0`
+- VSCode extensions:
+  - [PowerShell](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
+  - [Polygot Notebooks](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.dotnet-interactive-vscode) - voor het gebruiken van Polygot interactieve notebooks, zoals dit bestand.
+
+
+### Optioneel
+
+- [Git Credential Manager for Windows](https://github.com/git-ecosystem/git-credential-manager)
+  - > `winget install --id Git.GCM`
+- [Windows Terminal](https://learn.microsoft.com/en-us/windows/terminal/install) - Deze maakt het gebruik van shells prettiger met custom fonts and veel customization options.
+- [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) - Git blame annotations, CodeLens, etc.
+
+## Als je alle benodigdheden hebt, kunnen we beginnen!
+
+#!markdown
+
+> **Ter Info**: Veel van de PowerShell commando's hieronder eindigen met `Out-String`. Dit is gedaan omdat de PowerShell output in een Polygot notebook anders is dan in een console sessie. Door de Out-String lijkt de output veel meer zoals deze in een console er zou uitzien. Je hoeft dus in de console geen pipe naar `Out-String` te doen.
+
+#!markdown
+
+## **Oefening 1:** git werking controleren
+
+#!pwsh
+
+git --version
+
+#!markdown
+
+Dit zou je output moeten zijn:
+
+```bash
+git version 2.xx.x.windows.1
+```
+
+#!markdown
+
+## **Oefening 2:** nieuwe lege map maken
+
+We beginnen met het aanmaken van een lege map op onze computer om te gebruiken als git repository. Je kunt dit natuurlijk doen met explorer, of je gebruikt natuurlijk PowerShell.
+
+#!pwsh
+
+New-Item -Path 'C:\' -ItemType Directory -Name 'GitTraining' | Out-String
+
+#!markdown
+
+Deze map is volledig leeg, we gaan dit controleren door een dir van deze map te doen met `Get-ChildItem -Force`, zodat je ook eventuele verborgen bestanden ziet en de hoeveelheid objecten te tellen
+
+#!pwsh
+
+# Controleer of de map leeg is met een -Force voor evt. verborgen bestanden door de objecten te tellen
+(Get-ChildItem -Path 'C:\GitTraining' -Force).Count
+
+# De output hieronder zou 0 moeten zijn
+
+#!markdown
+
+## **Oefening 3:** Folder initialiseren als een git-repository
+
+Git maakt gebruik van een lokale folder de je initialiseert als repository. Vanaf dat moment houdt git alle wijzigingen bij in deze folder.
+We gaan dit doen met de net aangemaakt GitTraining folder
+
+#!pwsh
+
+# Zorg dat je in de juiste map zit
+Set-Location -Path 'C:\GitTraining' | Out-String
+
+# Initialiseer een nieuwe Git repository
+git init | Out-String
+
+#!markdown
+
+## **Oefening 4:** Controleren git initialisatie
+
+#!markdown
+
+We gaan nu nogmaals kijken of de folder nog steeds leeg is, je moet daarvoor wel verborgen items zichtbaar maken.
+
+#!pwsh
+
+Get-Childitem -Path 'C:\GitTraining' -Force | Out-String
+
+#!markdown
+
+Als het goed is, zie je dat de folder niet meer leeg is, maar er nu een `.git` subfolder bestaat.
+
+Hieronder de structuur van die .git-subfolder:
+
+```bash
+└── .git/
+    ├── HEAD
+    ├── config
+    ├── description
+    ├── hooks/
+    ├── info/
+    ├── objects/
+    └── refs/
+```
+
+**BELANGRIJK!**
+
+Dit is puur achtergrondinformatie, maar het is dus **NOOIT** de bedoeling dat je handmatig iets aanpast in de .git folder. De folder is niet voor niets verborgen en alle aanpassingen in deze folder zouden via git commando's moeten plaatsvinden.
+
+**Blijf dus uit de .git folder!**
+
+Om zelf te controleren hoe je nieuwe git repository eruit ziet, kun je het volgende commando gebruiken:
+
+#!pwsh
+
+Get-ChildItem -Path 'C:\GitTraining' -Force -Recurse | Sort-Object FullName | Select-Object FullName | Out-String
+
+#!markdown
+
+## **Oefening 5:** Git status
+
+Eén van de meest gebruikte commando's waar je eigenlijk altijd mee zou moeten beginnen als je in een repository werkt is `git status`
+
+We gaan dit commando later verder uitleggen, maar om deze eerste oefening af te sluiten draaien we dit commando in een nieuwe lege repository die net is geïnitialiseerd.
+
+#!pwsh
+
+git status
+
+#!markdown
+
+## Einde les 01
