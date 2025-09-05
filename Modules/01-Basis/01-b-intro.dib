@@ -151,6 +151,24 @@ Get-ChildItem -Path 'C:\GitTraining' -Force -Recurse | Sort-Object FullName | Se
 
 #!markdown
 
+> **Ter Info**  
+> Afhankelijk van je Git-versie en instellingen kan de standaard branch in een nieuwe repository `master` of `main` heten.  
+> 
+> - Sinds Git 2.28 kun je zelf instellen hoe de eerste branch moet heten via de optie `init.defaultBranch`.  
+> - Standaard is dit vaak nog `master`, maar veel platforms (zoals GitHub) gebruiken `main`.  
+> 
+> Je kunt controleren wat bij jou is ingesteld met:
+> ```pwsh
+> git config --get init.defaultBranch
+> ```
+> 
+> Wil je dat nieuwe repositories altijd `main` als standaard branch krijgen, stel dit dan eenmalig in:
+> ```pwsh
+> git config --global init.defaultBranch main
+> ```
+
+#!markdown
+
 ## Oefening 5: Git status
 
 #!markdown
