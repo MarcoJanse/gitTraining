@@ -79,6 +79,8 @@ Na `git add` zie je dat het bestand in de **staging area** staat en klaar is om 
 
 ## Oefening 4: Commits
 
+#!markdown
+
 Met `git commit` leg je de huidige status van de bestanden in de staging area vast in de repository.
 
 ### Configuratie: Git user name en email
@@ -136,12 +138,11 @@ Met `git log` kun je de commit geschiedenis bekijken.
 
 #!pwsh
 
-git log --oneline
+git log
 
 #!markdown
 
 Je ziet nu een lijst met commits (waarschijnlijk nog maar één 😉).  
-De `--oneline` optie maakt de output korter en overzichtelijker.  
 
 #!markdown
 
@@ -156,12 +157,18 @@ Laten we de `readme.txt` aanpassen en zien hoe git dit detecteert.
 # Voeg een regel toe in het bestand
 Add-Content -Path 'C:\GitTraining\readme.txt' -Value "Dit is mijn eerste git repository."
 
+#!markdown
+
+Controleer hierna wederom de status met `git status`
+
+#!pwsh
+
 git status
 
 #!markdown
 
-👉 Het bestand staat nu als **modified**.  
-Voordat we committen, kun je het verschil bekijken met `git diff`.
+👉 Het bestand staat nu als **modified**. en als wijziging gemarkeerd die commit kan worden.
+Voordat we een commit doen, kun je het verschil bekijken met `git diff`.
 
 #!pwsh
 
@@ -170,12 +177,120 @@ git diff
 #!markdown
 
 De `git diff` laat precies zien wat er veranderd is in je bestand(en).  
-Pas daarna kun je de wijziging committen met:
+Als je akkoord bent met deze wijzigingen kun je de wijziging committen met de volgende commando's:
 
-```pwsh
-git add readme.txt
-git commit -m "Readme uitgebreid met eerste tekst"
+`git add <bestandsnaam>`
+
+  - Dit commando staged een bestand. Hiermee zet je één of meerdere bestanden klaar om te committen.
+
+#!pwsh
+
+git add .\readme.txt
 
 #!markdown
 
-## Einde les 2
+Kijk hierna weer naar de status om steeds het verschil te zien in fases
+
+#!pwsh
+
+git status
+
+#!markdown
+
+`git commit -m "omschrijving"`
+  
+  - Dit commando doet de daadwerkelijke commit waarbij je de wijzigingen registreert in git. Wie heeft de wijzigingen gedaan en wanneer en wat is de omschrijving van die wijziging:
+
+#!pwsh
+
+git commit -m "Readme voorzien van eerste tekst"
+
+#!markdown
+
+Controleer nu de status
+
+#!pwsh
+
+git status
+
+#!markdown
+
+Je zult nu zien dat er niets te doen is volgens git. Alles is gecommit en opgeslagen qua wijzigingen.
+
+Controleer vervolgens de logfile weer.
+
+#!csharp
+
+git log
+
+#!markdown
+
+Je krijgt dan een overzicht van alle commits met commit ID, auteur, datum en omschrijving.
+Dit kan snel onoverzichtelijk worden met veel commits in je branch. 
+
+**Tip:** Gebruik `git log --oneline` voor een overzicht van alle commits per regel.
+
+#!pwsh
+
+git log --oneline
+
+#!markdown
+
+Laten we nu nog twee commits maken voor nog een paar wijzigingen en ook steeds kijken waar de HEAD zich bevind
+
+#!pwsh
+
+# Voeg nog een regel toe in het bestand
+Add-Content -Path 'C:\GitTraining\readme.txt' -Value "Dit is een tweede regel in het bestand in een aparte commit"
+
+git add .\readme.txt
+git commit -m "Tweede regel toegevoegd aan readme"
+
+#!markdown
+
+We gaan nu de derde wijziging maken door met notepad wijzigingen te maken aan het document en bestaande tekst te wijzigen en een stuk tekst toe te voegen in dezelfde commit en kijken hoe dit eruit ziet.
+
+#!pwsh
+
+notepad 'C:\GitTraining\readme.txt'
+
+#!markdown
+
+Pas hier de eerste regel aan met wat andere tekst en voeg wat tekst toe op het einde.
+
+Mocht je geen inspiratie hebben voor het toevoegen van tekst kun je onderstaande erin plakken:
+
+```text
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+   
+
+```
+
+> Ik heb express wat spaties en lege regels toegevoegd voor een demonstratie van de git diff
+
+Bekijk nu de git status en doe vervolgens een `git diff`. Wat zie je?
+
+#!pwsh
+
+git status
+
+#!pwsh
+
+git diff 
+
+#!markdown
+
+Stage deze wijzigingen weer en commit ze.
+
+#!pwsh
+
+git add .\readme.txt
+git commit -m "Wijzigingen en toevoegingen in readme"
+
+#!markdown
+
+## === Einde les 2 ===
