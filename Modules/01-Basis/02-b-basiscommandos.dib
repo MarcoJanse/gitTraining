@@ -1,0 +1,140 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!markdown
+
+# Git basis - 02 - eerste commits
+
+#!markdown
+
+## Inleiding 
+
+#!markdown
+
+In de vorige les hebben we een repository geïnitialiseerd en kennisgemaakt met `git status`.  
+In deze les gaan we verder met de eerste *echte handelingen* in git: bestanden toevoegen, commits maken, en kijken naar de commitgeschiedenis.  
+
+#!markdown
+
+## Oefening 1: Een bestand aanmaken
+
+#!markdown
+
+We beginnen met een leeg bestand dat we in git gaan opslaan.
+
+#!pwsh
+
+# Zorg dat je in de juiste map zit
+Set-Location -Path 'C:\GitTraining' | Out-String
+
+#!pwsh
+
+# Maak een nieuw bestand aan
+New-Item -Path 'C:\GitTraining' -ItemType File -Name 'readme.txt' | Out-String
+
+#!markdown
+
+Controleer of het bestand bestaat:
+
+#!pwsh
+
+Get-ChildItem -Path 'C:\GitTraining' | Out-String
+
+#!markdown
+
+## Oefening 2: Status controleren
+
+#!markdown
+
+Voer opnieuw `git status` uit om te zien wat git herkent als wijziging:
+
+#!pwsh
+
+git status
+
+#!markdown
+
+👉 Je ziet dat er een *untracked file* is: `readme.txt`.  
+Dit betekent dat git het bestand wel ziet, maar nog niet volgt.
+
+#!markdown
+
+## Oefening 3: Bestand toevoegen aan de staging area
+
+Met `git add` vertel je git dat dit bestand onderdeel moet worden van de volgende commit.  
+
+#!pwsh
+
+git add readme.txt
+git status
+
+#!markdown
+
+Na `git add` zie je dat het bestand in de **staging area** staat en klaar is om te committen.
+
+#!markdown
+
+## Oefening 4: Eerste commit maken
+
+Met `git commit` leg je de huidige status van de bestanden in de staging area vast in de repository.
+
+#!pwsh
+
+git commit -m "Eerste commit: readme.txt toegevoegd" | Out-String
+
+#!markdown
+
+👉 Een commit heeft altijd een **commit message**.  
+Deze beschrijft kort *wat* je hebt gedaan.  
+Probeer commit messages altijd duidelijk en beknopt te houden.
+
+#!markdown
+
+## Oefening 5: Commitgeschiedenis bekijken
+
+Met `git log` kun je de commitgeschiedenis bekijken.
+
+#!pwsh
+
+git log --oneline
+
+#!markdown
+
+Je ziet nu een lijst met commits (waarschijnlijk nog maar één 😉).  
+De `--oneline` optie maakt de output korter en overzichtelijker.  
+
+#!markdown
+
+## Oefening 6: Een wijziging maken en vergelijken
+
+Laten we de `readme.txt` aanpassen en zien hoe git dit detecteert.
+
+#!pwsh
+
+# Voeg een regel toe in het bestand
+Add-Content -Path 'C:\GitTraining\readme.txt' -Value "Dit is mijn eerste git repository."
+
+git status
+
+#!markdown
+
+👉 Het bestand staat nu als **modified**.  
+Voordat we committen, kun je het verschil bekijken met `git diff`.
+
+#!pwsh
+
+git diff
+
+#!markdown
+
+De `git diff` laat precies zien wat er veranderd is in je bestand(en).  
+Pas daarna kun je de wijziging committen met:
+
+```pwsh
+git add readme.txt
+git commit -m "Readme uitgebreid met eerste tekst"
+
+#!markdown
+
+## Einde les 2
