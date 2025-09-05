@@ -62,7 +62,9 @@ Dit betekent dat git het bestand wel ziet, maar nog niet volgt.
 
 ## Oefening 3: Bestand toevoegen aan de staging area
 
-Met `git add` vertel je git dat dit bestand onderdeel moet worden van de volgende commit.  
+#!markdown
+
+Met `git add` vertel je git dat dit bestand onderdeel moet worden van de volgende commit. 
 
 #!pwsh
 
@@ -75,9 +77,44 @@ Na `git add` zie je dat het bestand in de **staging area** staat en klaar is om 
 
 #!markdown
 
-## Oefening 4: Eerste commit maken
+## Oefening 4: Commits
 
 Met `git commit` leg je de huidige status van de bestanden in de staging area vast in de repository.
+
+### Configuratie: Git user name en email
+
+Voordat je commits kunt maken, moet Git weten *wie* de auteur van de commits is.  
+Dit stel je éénmalig in met `git config`.
+
+Je kunt dit globaal doen (voor al je repositories) door de `--global` parameter mee te geven, of per repo in te stellen.
+
+```bash
+git config --global user.name "Jouw Naam"
+git config --global user.email "jouw@email.com"
+```
+
+> **Terminal oefening**
+>
+> Doe bovenstaande opdracht in je terminal, aangezien de username en user email instellingen bij iedereen uniek zijn.
+
+#!markdown
+
+Controleer daarna of de instellingen goed zijn gezet:
+
+#!pwsh
+
+git config --global --list
+
+#!markdown
+
+👉 Deze configuratie wordt opgeslagen in je gebruikersprofiel en geldt voor al je projecten.  
+Wil je voor een specifieke repository een andere naam of e-mail, gebruik dan dezelfde commando’s maar zonder `--global`.
+
+#!markdown
+
+### Je eerste commit maken
+
+Nu is het tijd om je eerste commit te maken
 
 #!pwsh
 
@@ -91,9 +128,11 @@ Probeer commit messages altijd duidelijk en beknopt te houden.
 
 #!markdown
 
-## Oefening 5: Commitgeschiedenis bekijken
+## Oefening 5: Commit geschiedenis bekijken
 
-Met `git log` kun je de commitgeschiedenis bekijken.
+#!markdown
+
+Met `git log` kun je de commit geschiedenis bekijken.
 
 #!pwsh
 
@@ -107,6 +146,8 @@ De `--oneline` optie maakt de output korter en overzichtelijker.
 #!markdown
 
 ## Oefening 6: Een wijziging maken en vergelijken
+
+#!markdown
 
 Laten we de `readme.txt` aanpassen en zien hoe git dit detecteert.
 
