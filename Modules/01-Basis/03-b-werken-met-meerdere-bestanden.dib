@@ -1,0 +1,139 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"pwsh","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!markdown
+
+# Git basis - 03 - werken met meerdere bestanden
+
+#!markdown
+
+## Inleiding
+
+In de vorige les hebben we commits gemaakt met één bestand.  
+In deze les leer je hoe je met **meerdere bestanden tegelijk** kunt werken, hoe je commits per bestand kunt bekijken, en hoe je overzicht houdt met `git diff` en `git log`.  
+We sluiten af met een aantal visuele samenvattingen in Mermaid-diagrammen.
+
+#!markdown
+
+## Oefening 1: Meerdere bestanden maken
+
+#!pwsh
+
+# Zorg dat je in de juiste map zit
+Set-Location -Path 'C:\GitTraining' | Out-String
+
+# Maak meerdere nieuwe bestanden aan
+New-Item -Path 'C:\GitTraining' -ItemType File -Name 'index.html' | Out-String
+New-Item -Path 'C:\GitTraining' -ItemType File -Name 'app.js' | Out-String
+New-Item -Path 'C:\GitTraining' -ItemType File -Name 'style.css' | Out-String
+
+#!markdown
+
+Controleer de status om te zien wat git herkent.
+
+#!pwsh
+
+git status
+
+#!markdown
+
+👉 Je ziet nu meerdere *untracked files*.  
+We kunnen ze allemaal toevoegen of juist één voor één.
+
+#!markdown
+
+## Oefening 2: Alle gewijzigde bestanden in één keer stagen
+
+Met een punt `.` geef je aan dat **alle gewijzigde bestanden in de huidige directory** gestaged moeten worden.
+
+#!pwsh
+
+git add .
+
+git status
+
+#!markdown
+
+👉 Hiermee voeg je alles toe.  
+Dit is handig, maar kan gevaarlijk zijn als je niet alles wilt committen.  
+Daarom kun je ook specifieke bestanden toevoegen.
+
+#!markdown
+
+## Oefening 3: Specifieke bestanden stagen
+
+#!pwsh
+
+# Reset eerst de staging area
+git reset
+
+# Voeg alleen index.html toe
+git add index.html
+
+git status
+
+#!markdown
+
+👉 Alleen `index.html` staat nu in de staging area.  
+Zo kun je selectief kiezen wat je commit.
+
+#!markdown
+
+## Oefening 4: Commit maken met meerdere bestanden
+
+Stel je wilt nu **alle drie de bestanden** samen in één commit opnemen:
+
+#!pwsh
+
+git add index.html app.js style.css
+git commit -m "Basisbestanden toegevoegd: HTML, JS en CSS"
+
+#!markdown
+
+👉 Deze commit bevat meerdere bestanden tegelijk.
+
+#!markdown
+
+## Oefening 5: Diff per bestand en diff totaal
+
+Je kunt verschillen per bestand bekijken of in één overzicht.
+
+- Per bestand:
+```bash
+git diff HEAD~1 index.html
+```
+
+- Alle wijzigingen in één overzicht:
+```bash
+git diff HEAD~1
+```
+
+Probeer beide varianten uit en bekijk de verschillen.
+
+#!markdown
+
+## Samenvatting in grafieken
+
+### Git proces flow (edit → stage → commit)
+
+```mermaid
+flowchart LR
+  A[Working Directory] -- git add --> B[Staging Area]
+  B -- git commit --> C[(Repository)]
+```
+
+### Commit historie met meerdere bestanden
+
+```mermaid
+gitGraph
+  commit id: "c1" tag: "Commit 1"
+  commit id: "c2" tag: "Commit 2"
+  commit id: "c3" tag: "Commit 3 (meerdere bestanden)"
+```
+
+👉 In commit `c3` zitten meerdere bestanden (bijv. index.html, app.js, style.css).
+
+#!markdown
+
+## === Einde les 3 ===
