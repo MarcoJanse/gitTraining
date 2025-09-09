@@ -17,6 +17,29 @@ Je kunt deze oefeningen en voorbeelden zelf uitvoeren in VSCode met de interacti
 
 #!markdown
 
+## Wat is Git?
+
+#!markdown
+
+Git is een versiebeheersysteem dat bestandswijzigingen bijhoudt en samenwerking faciliteert, waardoor meerdere mensen aan hetzelfde project kunnen werken terwijl de volledige geschiedenis van wijzigingen behouden blijft.  
+Het belangrijkste van Git is dat elke gebruiker een volledig werkende kopie van de code op zijn/haar eigen computer kan hebben, terwijl het toch de flexibiliteit biedt om samen te werken aan één codeproject.
+
+> **Notitie** Git is vooral bedoeld voor het versiebeheer van tekstbestanden, niet voor binaire bestanden, grote bestanden, plaatjes of complete programma's.
+
+```mermaid
+flowchart LR
+  repo[(Project repository)]
+  u1[Gebruiker 1 - eigen kopie]
+  u2[Gebruiker 2 - eigen kopie]
+  u3[Gebruiker 3 - eigen kopie]
+
+  repo <---> u1
+  repo <---> u2
+  repo <---> u3
+```
+
+#!markdown
+
 ## Benodigdheden
 
 #!markdown
@@ -29,8 +52,8 @@ Om deze cursus zo optimaal te kunnen doen, heb je de volgende zaken nodig:
   - `winget install --id Microsoft.PowerShell --exact`
 - [VSCode](https://code.visualstudio.com/download)
   - `winget install --id Microsoft.VisualStudioCode`
-- [Microsoft .NET SDK 9.0]() - voor het gebruiken van Polygot interactieve notebooks, zoals dit bestand.
-  - `winget install --id Microsoft .NET SDK 9.0`
+- [Microsoft .NET SDK 9.0](https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.304/dotnet-sdk-9.0.304-win-x64.exe) - voor het gebruiken van Polygot interactieve notebooks, zoals dit bestand.
+  - `winget install --id Microsoft.DotNet.SDK.9`
 - VSCode extensions:
   - [PowerShell](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
   - [Polygot Notebooks](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.dotnet-interactive-vscode) - voor het gebruiken van Polygot interactieve notebooks, zoals dit bestand.
