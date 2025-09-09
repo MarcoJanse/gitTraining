@@ -10,6 +10,8 @@
 
 ## Inleiding
 
+#!markdown
+
 In de vorige les hebben we commits gemaakt met één bestand.  
 In deze les leer je hoe je met **meerdere bestanden tegelijk** kunt werken, hoe je commits per bestand kunt bekijken, en hoe je overzicht houdt met `git diff` en `git log`.  
 We sluiten af met een aantal visuele samenvattingen in Mermaid-diagrammen.
@@ -45,6 +47,8 @@ We kunnen ze allemaal toevoegen of juist één voor één.
 
 ## Oefening 2: Alle gewijzigde bestanden in één keer stagen
 
+#!markdown
+
 Met een punt `.` geef je aan dat **alle gewijzigde bestanden in de huidige directory** gestaged moeten worden.
 
 #!pwsh
@@ -56,7 +60,7 @@ git status
 #!markdown
 
 👉 Hiermee voeg je alles toe.  
-Dit is handig, maar kan gevaarlijk zijn als je niet alles wilt committen.  
+Dit is handig, maar kan onpraktisch zijn als je niet alles wilt committen of de bestanden geen directe relatie met elkaar hebben.
 Daarom kun je ook specifieke bestanden toevoegen.
 
 #!markdown
@@ -97,6 +101,8 @@ git commit -m "Basisbestanden toegevoegd: HTML, JS en CSS"
 
 ## Oefening 5: Diff per bestand en diff totaal
 
+#!markdown
+
 Je kunt verschillen per bestand bekijken of in één overzicht.
 
 - Per bestand:
@@ -114,6 +120,8 @@ Probeer beide varianten uit en bekijk de verschillen.
 #!markdown
 
 ## Samenvatting in grafieken
+
+#!markdown
 
 ### Git proces flow (edit → stage → commit)
 
