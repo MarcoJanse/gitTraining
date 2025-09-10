@@ -1,0 +1,141 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"pwsh","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!markdown
+
+# Git basis - 05 - Branches
+
+#!markdown
+
+## Inleiding
+
+#!markdown
+
+In deze les leer je wat **branches** zijn en hoe je ermee werkt: aanmaken, overschakelen en commits maken op een branch.  
+We gebruiken veelvuldig `git status`, `git log --oneline --decorate` en eenvoudige Mermaid-diagrammen.
+
+#!markdown
+
+### Wat zijn branches?
+
+#!markdown
+
+Met branching kun je een aftakking maken van je codebasis zodat je nieuwe functionaliteit kunt ontwikkelen zonder de stabiele basiscode direct te beïnvloeden.
+
+Op die manier kun je je codebasis beschermen tegen ongewenste of onstabiele wijzigingen (bijvoorbeeld wanneer de code in productie wordt gebruikt), terwijl er toch doorontwikkeld kan worden om de code te verbeteren.
+
+Meestal heet je hoofdtak (ook wel trunk genoemd) simpelweg main, terwijl je nieuwe branches zelf een naam kunt geven. Het is vaak handig om een branch naming strategy af te spreken, zodat alles overzichtelijk blijft.
+
+Als alles goed gaat, gebruik je branches om nieuwe groei mogelijk te maken en voeg je ze later weer samen (merge) met main, waardoor je project steeds groter en beter wordt.
+
+Het is ook een manier om verschillende toevoegingen en aanpassingen te groeperen binnen een team. Stel één persoon werkt aan een nieuwe feature voor een app in een feature branch die vooral uit nieuwe code bestaat die nog niet klaar is voor productie. Een ander persoon werkt in een bugfix branch om een foutje in de applicatie op te lossen en dit eerst veilig te ontwikkelen en te testen zonder de productie code te raken.
+
+#!markdown
+
+## Oefening 1: Branches bekijken en een nieuwe branch maken
+
+#!pwsh
+
+# Toon bestaande branches (er is waarschijnlijk alleen 'main' of 'master')
+git branch
+
+# Maak een nieuwe branch 'feature-x' (zonder te switchen)
+git branch feature-x
+
+# Bekijk branches opnieuw
+git branch
+
+#!markdown
+
+**Uitleg:** `git branch` zonder argumenten toont de lijst. Met een naam maak je een nieuwe branch aan.  
+De huidige branch is gemarkeerd met een sterretje `*`.
+
+#!markdown
+
+## Oefening 2: Overschakelen naar de branch en committen
+
+#!pwsh
+
+# Overschakelen naar de nieuwe branch
+git switch feature-x
+
+# Maak of wijzig een bestand en commit
+Add-Content -Path 'C:\GitTraining\feature.txt' -Value "Eerste regel in feature."
+git add feature.txt
+git commit -m "Feature: eerste regel"
+
+#!markdown
+
+**Uitleg:** Op `feature-x` staan nu commits die **niet** op `main` staan.  
+Gebruik `git status` om je situatie te checken en `git log --oneline --decorate` om de labels te zien.
+
+#!markdown
+
+### Visualisatie (conceptueel)
+
+#!markdown
+
+```mermaid
+flowchart LR
+  subgraph main
+    M1[C1] --> M2[C2]
+  end
+  subgraph feature-x
+    F1[F1]
+  end
+```
+
+#!markdown
+
+## Oefening 3: Terug naar main en verschillen bekijken
+
+#!pwsh
+
+# Terug naar main (of master)
+git switch main
+
+# Beknopte geschiedenis met branch labels
+git log --oneline --decorate -n 10
+
+#!markdown
+
+👉 Je ziet dat de commit(s) op `feature-x` niet op `main` staan.  
+Schakel heen en weer met `git switch` en controleer telkens `git status` en `git log --oneline --decorate`.
+
+#!markdown
+
+## Oefening 4: Nieuwe branch maken en direct overschakelen
+
+#!pwsh
+
+# Maak en schakel direct naar een nieuwe branch 'feature-y'
+git switch -c feature-y
+
+# Voeg een kleine wijziging toe en commit
+Add-Content -Path 'C:\GitTraining\feature.txt' -Value "`nTweede regel in feature-y."
+git add feature.txt
+git commit -m "Feature-y: tweede regel"
+
+#!markdown
+
+## Samenvatting gebruikte Git-commando's
+
+#!markdown
+
+```markdown
+| Commando | Uitleg |
+|----------|--------|
+| `git branch` | Toon branches; zonder argumenten laat het een lijst zien. |
+| `git branch <naam>` | Maak een nieuwe branch aan (blijft op huidige branch). |
+| `git switch <naam>` | Schakel over naar een bestaande branch. |
+| `git switch -c <naam>` | Maak en schakel naar een nieuwe branch. |
+| `git status` | Controleer je huidige werk- en branchstatus. |
+| `git log --oneline --decorate` | Toon compacte geschiedenis met branch-labels. |
+| `git add <bestand>` | Stage wijzigingen. |
+| `git commit -m "bericht"` | Commit wijzigingen. |
+```
+
+#!markdown
+
+## _Einde les 01_

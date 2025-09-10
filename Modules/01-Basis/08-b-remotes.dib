@@ -1,0 +1,115 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"pwsh","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!markdown
+
+# Git basis - 08 - Remotes
+
+#!markdown
+
+## Inleiding
+
+#!markdown
+
+Je leert wat een **remote** is en hoe je je lokale repo koppelt aan een remote (bijv. GitHub). We oefenen met `remote add`, `push`, `fetch`, `pull` en de verschillen daartussen.
+
+> **Let op:** Voor deze les heb je een (lege) remote repository nodig die je zelf aanmaakt (GitHub/GitLab/Azure DevOps). Gebruik HTTPS of SSH naar keuze.
+
+#!markdown
+
+## Oefening 1: Remote configureren
+
+#!pwsh
+
+# Bekijk huidige remotes (waarschijnlijk leeg)
+git remote -v
+
+# Voeg een remote toe (vervang URL door jouw repo)
+# Voorbeeld met HTTPS:
+# git remote add origin https://github.com/jouwaccount/jouwrepo.git
+
+# Controleer
+git remote -v
+
+#!markdown
+
+## Oefening 2: Eerste push naar remote
+
+#!pwsh
+
+# Push de huidige branch (bijv. main) naar origin en koppel upstream
+git push -u origin main
+
+#!markdown
+
+**Uitleg:** De volgende `git push`-commando's kunnen nu zonder extra parameters, omdat upstream is ingesteld.
+
+#!markdown
+
+## Oefening 3: Wijziging maken, pushen en pullen
+
+#!pwsh
+
+# Maak een wijziging lokaal
+Add-Content -Path 'C:\GitTraining\remote-demo.txt' -Value "Lokaal toegevoegd"
+git add remote-demo.txt
+git commit -m "Remote demo: lokale wijziging"
+
+# Push naar remote
+git push
+
+# Simuleer dat er remote ook iets is veranderd (doe dit eventueel in de web-UI)
+# Daarna: haal/integreer die wijzigingen lokaal
+git fetch
+git pull
+
+#!markdown
+
+## Oefening 4: Remote-tracking info bekijken
+
+#!pwsh
+
+# Toon welke branch waar naar wijst en of je voor/achter loopt
+git branch -vv
+
+# Compacte geschiedenis met remote labels
+git log --oneline --decorate -n 10
+
+#!markdown
+
+### Visualisatie
+
+#!markdown
+
+```mermaid
+flowchart LR
+  subgraph Local
+    L1[Lokaal: commits]
+  end
+  subgraph Remote
+    R1[Origin: commits]
+  end
+
+  Local -->|git push| Remote
+  Remote -->|git fetch/pull| Local
+```
+
+#!markdown
+
+## Samenvatting gebruikte Git-commando's
+
+#!markdown
+
+```markdown
+| Commando | Uitleg |
+|----------|--------|
+| `git remote -v` | Toon gekoppelde remotes en hun URL's. |
+| `git remote add origin <url>` | Koppel je lokale repo aan een remote. |
+| `git push -u origin <branch>` | Push branch en stel upstream in (handig voor volgende pushes). |
+| `git push` | Push je commits naar de gekoppelde upstream. |
+| `git fetch` | Haal de nieuwste verwijzingen binnen (zonder te mergen). |
+| `git pull` | `fetch` + merge (of rebase, afhankelijk van configuratie). |
+| `git branch -vv` | Toon tracking-informatie (voor/achterstand) per branch. |
+| `git log --oneline --decorate` | Bekijk compacte geschiedenis met remote labels. |
+```

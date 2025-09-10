@@ -1,0 +1,109 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"pwsh","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!markdown
+
+# Git basis - 07 - Conflicten oplossen
+
+#!markdown
+
+## Inleiding
+
+#!markdown
+
+Je leert wat **merge-conflicten** zijn en hoe je ze oplost. We oefenen met twee branches die hetzelfde bestand op dezelfde regel aanpassen.
+
+#!markdown
+
+## Oefening 1: Conflict creëren
+
+#!pwsh
+
+# Start vanuit main
+git switch main
+
+# Zorg dat het doelbestand bestaat
+Set-Content -Path 'C:\GitTraining\conflict.txt' -Value "Startregel"
+git add conflict.txt
+git commit -m "Init: conflict.txt"
+
+# Branch 1 wijzigt dezelfde regel
+git switch -c branch1
+Set-Content -Path 'C:\GitTraining\conflict.txt' -Value "Wijziging vanuit branch1"
+git add conflict.txt
+git commit -m "branch1: wijzig eerste regel"
+
+# Branch 2 wijzigt dezelfde regel (vanaf main)
+git switch main
+git switch -c branch2
+Set-Content -Path 'C:\GitTraining\conflict.txt' -Value "Wijziging vanuit branch2"
+git add conflict.txt
+git commit -m "branch2: wijzig eerste regel"
+
+#!markdown
+
+## Oefening 2: Merge uitvoeren en conflict zien
+
+#!pwsh
+
+# Probeer branch1 in branch2 te mergen (of andersom)
+git switch branch2
+git merge branch1
+
+git status
+
+#!markdown
+
+👉 Je ziet nu een **conflict**. Open `conflict.txt` en los het op: houd de juiste regels over en verwijder de conflict-markers `<<<<<<<`, `=======`, `>>>>>>>`.
+
+#!pwsh
+
+# Nadat je het bestand handmatig hebt bijgewerkt:
+git add conflict.txt
+git commit -m "Los conflict op tussen branch1 en branch2"
+
+#!markdown
+
+### Visualisatie
+
+#!markdown
+
+```mermaid
+flowchart LR
+  B1[branch1 wijzig] --> M[merge]
+  B2[branch2 wijzig] --> M
+  M --> R[resolved]
+```
+
+#!markdown
+
+## Oefening 3: Merge afbreken (optioneel)
+
+#!markdown
+
+Als je vastloopt, kun je de merge afbreken en opnieuw proberen:
+
+```bash
+git merge --abort
+```
+
+Daarna kun je opnieuw mergen nadat je de situatie hebt hersteld.
+
+#!markdown
+
+## Samenvatting gebruikte Git-commando's
+
+#!markdown
+
+```markdown
+| Commando | Uitleg |
+|----------|--------|
+| `git switch -c <branch>` | Maak en schakel naar een nieuwe branch. |
+| `git switch <branch>` | Schakel naar een branch. |
+| `git merge <branch>` | Merge een branch in de huidige branch. |
+| `git status` | Zie snel of er conflicten zijn en welke bestanden. |
+| `git add <bestand>` | Stage de opgeloste bestanden. |
+| `git commit -m "bericht"` | Leg de opgeloste merge vast. |
+| `git merge --abort` | Breek de lopende merge af. |
+```

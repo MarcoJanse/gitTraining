@@ -1,0 +1,105 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"pwsh","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!markdown
+
+# Git basis - 06 - Lokale merges
+
+#!markdown
+
+## Inleiding
+
+#!markdown
+
+Je leert **branches samenvoegen** (mergen). We behandelen het verschil tussen **fast-forward** en een **merge commit**.  
+Gebruik `git log --oneline --decorate` om voor en na te vergelijken.
+
+#!markdown
+
+## Oefening 1: Fast-forward merge
+
+#!pwsh
+
+# Zorg dat je op main zit
+git switch main
+
+# Maak een branch en commit daar iets
+git switch -c feature-a
+Add-Content -Path 'C:\GitTraining\feature-a.txt' -Value "Feature A - start"
+git add feature-a.txt
+git commit -m "Feature A: start"
+
+# Terug naar main en merge (fast-forward)
+git switch main
+git merge feature-a
+
+#!markdown
+
+### Visualisatie (fast-forward)
+```mermaid
+flowchart LR
+  C1[C1] --> C2[C2] --> A1[Feature A: start]
+```
+
+#!markdown
+
+## Oefening 2: Merge met divergerende geschiedenis (merge commit)
+
+#!pwsh
+
+# Maak nieuwe branch en commit
+git switch -c feature-b
+Add-Content -Path 'C:\GitTraining\feature-b.txt' -Value "Feature B - start"
+git add feature-b.txt
+git commit -m "Feature B: start"
+
+# Terug naar main en maak ook een commit op main
+git switch main
+Add-Content -Path 'C:\GitTraining\readme.txt' -Value "Regel op main"
+git add readme.txt
+git commit -m "Main: extra regel"
+
+# Merge feature-b in main (maakt merge commit)
+git merge feature-b
+
+#!markdown
+
+### Visualisatie (merge commit)
+```mermaid
+flowchart LR
+  subgraph main
+    M1[C1] --> M2[C2] --> M3[Main: extra regel]
+  end
+  subgraph feature-b
+    FB1[Feature B: start]
+  end
+  FB1 --> M3
+```
+
+#!markdown
+
+## Oefening 3: Merge controleren en eventueel zonder fast-forward
+
+#!markdown
+
+- Controleer `git log --oneline --decorate` om te zien wat er is gebeurd.  
+- Optioneel: gebruik `git merge --no-ff <branch>` om **altijd** een merge commit te forceren (handig voor audittrail).
+
+#!markdown
+
+## Samenvatting gebruikte Git-commando's
+
+#!markdown
+
+```markdown
+| Commando | Uitleg |
+|----------|--------|
+| `git switch <branch>` | Schakel van branch. |
+| `git switch -c <branch>` | Maak en schakel naar nieuwe branch. |
+| `git merge <branch>` | Voeg de opgegeven branch samen in de huidige branch. |
+| `git merge --no-ff <branch>` | Forceer een merge commit ook bij fast-forward. |
+| `git log --oneline --decorate` | Vergelijk historie voor/na de merge. |
+| `git add <bestand>` | Stage wijzigingen. |
+| `git commit -m "bericht"` | Commit wijzigingen (ook de merge-resolutie). |
+```
