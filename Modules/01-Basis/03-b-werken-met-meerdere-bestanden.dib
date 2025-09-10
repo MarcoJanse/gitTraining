@@ -134,13 +134,276 @@ flowchart LR
 ### Commit historie met meerdere bestanden
 
 ```mermaid
-gitGraph
-  commit id: "c1" tag: "Commit 1"
-  commit id: "c2" tag: "Commit 2"
-  commit id: "c3" tag: "Commit 3 (meerdere bestanden)"
+flowchart LR
+  c1[C1]
+  c2[C2]
+  c3[C3]
+  c1 --> c2 --> c3
+
+  subgraph Files per commit
+    direction LR
+    f1[index.html]
+    f2[app.js]
+    f3a[index.html]
+    f3b[app.js]
+    f3c[style.css]
+  end
+
+  %% Koppeling bestand(en) aan commits
+  c1 --- f1
+  c2 --- f2
+  c3 --- f3a
+  c3 --- f3b
+  c3 --- f3c
 ```
 
 👉 In commit `c3` zitten meerdere bestanden (bijv. index.html, app.js, style.css).
+
+### Selectief stagen vs. alles stagen
+
+```mermaid
+flowchart LR
+  subgraph WD[Working Directory]
+    a[index.html]
+    b[app.js]
+    c[style.css]
+  end
+
+  subgraph SA[Staging Area]
+    sa1[index.html]
+    saAll[index.html, app.js, style.css]
+  end
+
+  subgraph Repo[Local Repository]
+    r1[(Commit met index.html)]
+    rAll[(Commit met alle 3 bestanden)]
+  end
+
+  %% Pad 1: selectief stagen
+  a -- "git add index.html" --> sa1
+  sa1 -- "git commit -m 'C1: index.html'" --> r1
+
+  %% Pad 2: alles stagen
+  WD -- "git add ." --> saAll
+  saAll -- "git commit -m 'C3: alle basisbestanden'" --> rAll
+```
+
+### Diff per bestand vs. diff totaal
+
+```mermaid
+flowchart LR
+  prev[(HEAD~1)]
+  curr[(HEAD)]
+
+  subgraph Changed
+    x1[index.html]
+    x2[app.js]
+    x3[style.css]
+  end
+
+  prev --> curr
+  curr --- x1
+  curr --- x2
+  curr --- x3
+
+  x1 -. "git diff HEAD~1 index.html" .-> curr
+  Changed -. "git diff HEAD~1" .-> curr
+```
+
+#!markdown
+
+## Wat is Head in Git?
+
+#!pwsh
+
+git log --oneline --decorate --graph -n 5
+
+#!markdown
+
+- HEAD is een wijzer (pointer) die aangeeft waar je je nu bevindt in de commit geschiedenis.
+- Meestal wijst HEAD naar de laatste commit op de huidige branch.
+
+### Voorbeeld
+
+- Als je net een commit hebt gemaakt, wijst HEAD naar die commit.
+- Wanneer je met git checkout naar een andere branch gaat, springt HEAD mee naar de laatste commit op die branch.
+
+```mermaid
+flowchart LR
+  c1[C1: Eerste commit]
+  c2[C2: Tweede commit]
+  c3[C3: Derde commit]
+
+  c1 --> c2 --> c3
+
+  subgraph Pointers
+    style Pointers fill:#f9f9f9,stroke:#bbb,stroke-dasharray: 3 3
+    HEAD([HEAD])
+    main[main]
+  end
+
+  HEAD -.-> main
+  main -.-> c3
+
+  %% Styling van de commit waar HEAD zich bevindt
+  style c3 fill:#4CAF50,stroke:#333,stroke-width:2px,color:#fff
+  %% Styling voor HEAD (andere vorm door ronde rechthoek)
+  style HEAD fill:#ff9800,stroke:#333,stroke-width:2px,color:#fff
+```
+
+### Terminologie
+
+- HEAD → jouw huidige positie in de commit geschiedenis.
+- HEAD~1 → de commit één stap vóór de huidige HEAD.
+- HEAD~2 → twee stappen terug, enz.
+- HEAD^ → de “ouder” van de huidige commit (vaak hetzelfde als HEAD~1).
+- Detached HEAD → wanneer HEAD direct naar een commit wijst, en niet naar een branch (bijv. als je git checkout <commit-id> doet).
+
+### Handige commando’s
+
+- git log --oneline → laat zien waar HEAD staat (HEAD -> main)
+- git diff HEAD~1 → toon de verschillen tussen de vorige commit en je huidige HEAD
+- git checkout HEAD~1 → ga terug naar de vorige commit (in detached HEAD)
+
+> **TIP** je kunt HEAD zien als een boeklegger in de commit geschiedenis. Het geeft aan waar je nu leest of schrijft in het “boek” van de repository.
+
+#!markdown
+
+## Extra oefening: diff tussen commits doen
+
+#!markdown
+
+We maken nog een paar wijzigingen met commit per wijziging zodat we daarna de diff van die commits kunnen vergelijken.
+
+#!markdown
+
+### Stap 1 - wijziging 1 in readme.txt
+
+#!pwsh
+
+Set-Location -Path 'C:\GitTraining' | Out-String
+Add-Content -Path 'C:\GitTraining\readme.txt' -Value "Vierde regel in het bestand"
+git add readme.txt
+git commit -m "C4: vierde regel toegevoegd in readme"
+
+#!markdown
+
+### Stap 2 - wijziging 2 in readme.txt
+
+#!pwsh
+
+Set-Location -Path 'C:\GitTraining' | Out-String
+Add-Content -Path 'C:\GitTraining\readme.txt' -Value "Vijfde regel toegevoegd in het bestand"
+git add readme.txt
+git commit -m "C5: vijfde regel toegevoegd in readme"
+
+#!markdown
+
+Nu heb je dus een commit geschiedenis die er ongeveer zo uitziet 
+Dit laat je zien met `git log --oneline`
+
+#!pwsh
+
+git log --oneline
+
+#!markdown
+
+### Stap 3 - Diffs bekijken
+
+#!markdown
+
+Laatste commit vs. vorige commit
+
+#!pwsh
+
+git diff HEAD~1
+
+#!markdown
+
+Laatste commit vs. twee terug (C5 vs. C3):
+
+#!pwsh
+
+git diff HEAD~2
+
+#!markdown
+
+Laatste commit vs. vier terug (C5 vs. C2):
+
+#!pwsh
+
+git diff HEAD~3
+
+#!markdown
+
+Laatste commit vs. vier terug (C5 vs. C1):
+
+#!pwsh
+
+git diff HEAD~4
+
+#!markdown
+
+Alleen verschillen in readme.txt t.o.v. twee commits terug:
+
+#!pwsh
+
+git diff HEAD~2 -- readme.txt
+
+#!markdown
+
+## Samenvatting gebruikte commando's
+
+#!markdown
+
+| Commando | Uitleg |
+|----------|--------|
+| `git status` | Toon de status van nieuwe/gewijzigde/staged bestanden. |
+| `git add <bestand>` | Stage selectief één of meerdere expliciet genoemde bestanden. |
+| `git add .` | Stage alle wijzigingen in de huidige map en submappen. |
+| `git reset` | Haal staging terug (unstage), zonder je werk te verliezen. |
+| `git commit -m "bericht"` | Maak een commit van de staged wijzigingen met bericht. |
+| `git log` | Volledige commitgeschiedenis met details. |
+| `git log --oneline` | Beknopte commitgeschiedenis (één commit per regel). |
+| `git diff` | Toon verschillen tussen working copy en staging/laatste commit. |
+| `git diff HEAD~1` | Diff t.o.v. de vorige commit. |
+| `git diff HEAD~2` | Diff t.o.v. twee commits terug. |
+| `git diff HEAD~1 -- <bestand>` | Diff van één bestand t.o.v. vorige commit. |
+| `git show HEAD~1` | Toon de vorige commit (diff + metadata), read-only. |
+| `git show HEAD~1:<pad/naar/bestand>` | Toon een bestand zoals het in die commit was. |
+
+#!markdown
+
+## Praktijkopdracht 1 - Herhaling uit lessen 1 t/m 3
+
+#!markdown
+
+### Doel
+
+Je zet zelf een nieuwe repository op en oefent met de volledige Git-workflow: bestanden maken, wijzigen, committen, logs bekijken en verschillen analyseren.
+
+### Opdracht
+
+1. Maak een nieuwe lege map en initialiseer deze als een Git repository.
+2. Controleer of de repository goed is aangemaakt.
+3. Maak drie nieuwe bestanden (bijvoorbeeld een HTML-, JS- en CSS-bestand).
+4. Voeg één bestand toe aan de staging area en maak daar je eerste commit mee.
+5. Wijzig dit bestand en commit die wijziging in een tweede commit.
+6. Voeg de andere twee bestanden toe en commit ze samen in één commit.
+7. Bekijk de commit geschiedenis in verschillende vormen: volledig, beknopt
+8. Maak nog twee extra wijzigingen aan een bestaand bestand (readme.txt) en commit ze één voor één.-
+9. Analyseer de verschillen met behulp van diffs:
+   1.  Vergelijk de laatste commit met de vorige.
+   2.  Vergelijk de laatste commit met twee, drie en vier commits terug.
+   3.  Vergelijk specifiek de inhoud van readme.txt tussen de laatste commit en een eerdere commit.
+10. Controleer je HEAD en leg voor jezelf uit waar HEAD, HEAD1, HEAD2 enz. naartoe wijzen in jouw commitgeschiedenis.
+
+### Zelfcontrole
+
+- Heb je minimaal vijf commits gemaakt?
+- Heb je zowel een commit met één bestand als een commit met meerdere bestanden?
+- Kun je de verschillen in een bestand terugzien met HEAD~N vergelijkingen?
+- Kun je verklaren waar HEAD zich bevindt in jouw log en hoe het verschuift na elke commit?
 
 #!markdown
 

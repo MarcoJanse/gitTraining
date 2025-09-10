@@ -4,7 +4,7 @@
 
 #!markdown
 
-# Git basis - 02 - eerste commits
+# Git basis - 02 - basis commando's
 
 #!markdown
 
@@ -17,11 +17,55 @@ In deze les gaan we verder met de eerste *echte handelingen* in git: bestanden t
 
 #!markdown
 
+## Git workflow
+
+#!markdown
+
+Hieronder zie je een plaatje die de drie hoofdgebieden van een git-workflow laat zien:
+
+```mermaid
+flowchart LR
+  WC[Working Copy]
+  SA[Staging Area]
+  LR[Local Repository]
+
+  WC -->|git add| SA
+  SA -->|git commit| LR
+```
+
+### Working Copy
+
+Hier bewerk en bewaar je je bestanden. Alles wat je opslaat staat in de working copy, maar Git houdt deze wijzigingen nog niet actief bij.
+
+### Staging Area
+
+Met `git add` zet je wijzigingen klaar in de staging area. Dit is de tussenstap waarin je bepaalt welke bestanden straks in de commit terechtkomen.
+
+### Local Repository
+
+Met `git commit` voeg je de klaargezette wijzigingen toe aan de lokale repository. Hier ontstaat de commitgeschiedenis: een blijvend logboek van alle wijzigingen, waar je later altijd doorheen kunt bladeren.
+
+```mermaid
+flowchart LR
+  WC[Working Copy<br>→ bestanden bewerken]
+  SA[Staging Area<br>→ wijzigingen klaarzetten]
+  LR[Local Repository<br>→ commits opslaan]
+
+  WC --> SA
+  SA --> LR
+```
+
+#!markdown
+
 ## Oefening 1: Een bestand aanmaken
 
 #!markdown
 
 We beginnen met een leeg bestand dat we in git gaan opslaan.
+
+#!markdown
+
+> **Achtergrond:** _Je zult in deze lessen veel PowerShell commando's zien die eindigen op `| Out-String`. Dit commando hoef je niet mee te geven als je in je terminal werkt, dan krijg je automatisch dezelfde output als met `Out-String`. Dit is toegevoegd juist om de output hetzelfde eruit te laten zien als in de terminal_
 
 #!pwsh
 
@@ -91,9 +135,16 @@ Dit stel je éénmalig in met `git config`.
 Je kunt dit globaal doen (voor al je repositories) door de `--global` parameter mee te geven, of per repo in te stellen.
 
 ```bash
+# Globaal
 git config --global user.name "Jouw Naam"
 git config --global user.email "jouw@email.com"
+
+# per repo
+git config user.name "Jouw Naam"
+git config user.email "jouw@email.com"
 ```
+
+Het handigste is om dit global in te stellen en eventueel voor bepaalde repositories aan te passen als je daarvoor een ander account gebruikt, wat veel voorkomt als je voor verschillende klanten werkt.
 
 > **Terminal oefening**
 >
@@ -260,15 +311,16 @@ Pas hier de eerste regel aan met wat andere tekst en voeg wat tekst toe op het e
 
 Mocht je geen inspiratie hebben voor het toevoegen van tekst kun je onderstaande erin plakken:
 
-```text
+#!value
+
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+
+
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-   
-
-```
+#!markdown
 
 > Ik heb express wat spaties en lege regels toegevoegd voor een demonstratie van de git diff
 
@@ -290,6 +342,75 @@ Stage deze wijzigingen weer en commit ze.
 
 git add .\readme.txt
 git commit -m "Wijzigingen en toevoegingen in readme"
+
+#!markdown
+
+## Commit Message Cheatsheet
+
+#!markdown
+
+### Schrijfstijl
+
+- **Gebruik de gebiedende wijs**  
+  - Bijvoorbeeld: `Voeg`, `Corrigeer`, `Verwijder` (niet "Voegde toe" of "Voegt toe").  
+- **Houd de eerste regel kort** (max. ±50 tekens).  
+- **Optioneel:** voeg een lege regel toe gevolgd door een langere uitleg (max. 72 tekens per regel).  
+
+### Goede commit-berichten
+- `Voeg README toe met projectbeschrijving`
+- `Corrigeer fout in berekening totaalprijs`
+- `Update .gitignore voor VSCode bestanden`
+- `Verwijder ongebruikte configuratieopties`
+
+### Structuurvoorbeeld van een commit
+
+> `<Korte samenvatting van de wijziging>`
+> 
+> `Optioneel: langere uitleg waarom de wijziging nodig was, wat er precies veranderd is, en eventuele bijkomende context`
+> 
+
+
+### Do’s ✅
+- Schrijf duidelijk **wat** er is veranderd.  
+- Benoem **waarom** de wijziging gedaan is (indien nuttig).  
+- Houd commits klein en overzichtelijk (één logische wijziging per commit).  
+
+### Don’ts ❌
+- Geen vage teksten als `fix`, `update`, `changes` of `asdasd`.  
+- Geen ellenlange eerste regel.  
+- Niet meerdere, totaal verschillende wijzigingen in één commit.   
+
+### Voorbeelden van slechte vs. goede commit-berichten
+
+| Slecht commit-bericht | Verbeterd commit-bericht |
+|------------------------|--------------------------|
+| `update` | `Update .gitignore voor VSCode bestanden` |
+| `fix` | `Corrigeer fout in berekening totaalprijs` |
+| `changes` | `Voeg validatie toe aan loginformulier` |
+| `asdf` | `Hernoem variabelen voor meer duidelijkheid` |
+| `new stuff` | `Implementeer zoekfunctie voor producten` |
+| `delete` | `Verwijder ongebruikte configuratieopties` |
+
+#!markdown
+
+## Samenvatting gebruikte Git-commando's
+
+#!markdown
+
+| Commando | Uitleg |
+|----------|--------|
+| `git status` | Bekijk de status van de repository: welke bestanden zijn nieuw, gewijzigd of staged. |
+| `git add <bestand>` | Voeg een bestand toe aan de staging area. |
+| `git add .` | Voeg alle wijzigingen in de huidige map en submappen toe aan de staging area. |
+| `git commit -m "bericht"` | Maak een commit met de staged wijzigingen en een commit message. |
+| `git config --global user.name "Naam"` | Stel je naam in voor commits (globaal). |
+| `git config --global user.email "email"` | Stel je e-mailadres in voor commits (globaal). |
+| `git config user.name "Naam"` | Stel je naam in voor commits in de huidige repository. |
+| `git config user.email "email"` | Stel je e-mailadres in voor commits in de huidige repository. |
+| `git config --global --list` | Toon de globale Git-configuratie. |
+| `git log` | Bekijk de volledige commitgeschiedenis met details. |
+| `git log --oneline` | Bekijk de commitgeschiedenis in een beknopt overzicht (één commit per regel). |
+| `git diff` | Toon de exacte verschillen tussen de working copy en de staging area. |
 
 #!markdown
 
