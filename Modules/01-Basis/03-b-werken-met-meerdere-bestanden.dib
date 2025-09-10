@@ -273,6 +273,8 @@ flowchart LR
 
 #!markdown
 
+> Deze oefening is optioneel als er tijd of interesse voor is.
+
 We maken nog een paar wijzigingen met commit per wijziging zodat we daarna de diff van die commits kunnen vergelijken.
 
 #!markdown
