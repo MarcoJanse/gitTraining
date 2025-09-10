@@ -1,0 +1,232 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp"},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"html","languageName":"HTML"},{"name":"http","languageName":"HTTP"},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"mermaid","languageName":"Mermaid"},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"value"}]}}
+
+#!markdown
+
+# Git basis - 04 - Dingen ongedaan maken
+
+#!markdown
+
+## Inleiding
+
+#!markdown
+
+In dit hoofdstuk leer je hoe je met Git wijzigingen kunt **ongedaan maken of herstellen**.  
+We oefenen met het terugzetten van bestanden, het herstellen van verwijderde bestanden, en het selectief overnemen van commits met *cherry-pick*.  
+
+Git is krachtig omdat het je bijna nooit “vast” laat zitten.  
+Zolang je commits maakt, kun je altijd terug naar een eerdere toestand, bestanden terughalen of zelfs individuele wijzigingen opnieuw toepassen.  
+
+We gebruiken hier veelvuldig `git status`, `git log` en `git diff` om te laten zien **wat er verandert en hoe Git het ziet**.
+
+#!markdown
+
+## Oefening 1: Een bestand herstellen naar de vorige commit
+
+#!markdown
+
+Stel, je hebt per ongeluk de inhoud van een bestand verpest. Met Git kun je dit eenvoudig terugzetten naar de versie van de vorige commit.
+
+#!pwsh
+
+# Maak een bestand aan en commit dit
+Set-Content -Path 'C:\GitTraining\script.ps1' -Value "Write-Output 'Hallo wereld'"
+git add script.ps1
+git commit -m "Voeg script.ps1 toe"
+
+#!pwsh
+
+# Pas het bestand expres aan
+Set-Content -Path 'C:\GitTraining\script.ps1' -Value "Write-Output 'Foutieve wijziging'"
+
+git status
+git diff
+
+#!markdown
+
+👉 Je ziet nu dat het bestand gewijzigd is. Stel dat dit een fout was, kun je het zo herstellen:
+
+```bash
+git restore script.ps1
+```
+
+Nu staat het bestand weer in de toestand van de laatste commit.
+
+> `git restore <bestandsnaam>` is eigenlijk alles ongedaan maken van een bestand wat je nog geen nieuwe commit had gegeven.
+
+#!markdown
+
+## Oefening 2: Een bestand herstellen dat in een commit is verwijderd
+
+#!markdown
+
+Stel dat je een bestand verwijdert en die verwijdering commit.  
+Maar later blijkt dat dit bestand toch belangrijk was.
+
+Hieronder de stappen:
+
+```powershell
+# Verwijder het bestand
+Remove-Item 'C:\GitTraining\script.ps1'
+```
+
+```bash
+# Controleer de status. Je ziet nu "deleted: script.ps1" staan als het goed is.
+git status
+```
+
+#!pwsh
+
+# Verwijder het bestand
+Read-Host "Druk op Enter om script.ps1 te verwijderen"
+Remove-Item 'C:\GitTraining\script.ps1' -Confirm
+
+# controleer de status. Je ziet nu "deleted: script.ps1" staan als het goed is.
+git status
+
+Read-Host "Druk op Enter om de verwijdering te stagen"
+git add script.ps1
+
+# Check nog een keer de status. Je ziet nu "deleted: script.ps1" staan onder "Changes to be committed"
+git status
+
+Read-Host "Druk op Enter om de verwijdering te committen"
+git commit -m "Verwijder script.ps1"
+
+# Controleer de log. Je ziet nu twee commits: een voor het toevoegen en een voor het verwijderen van script.ps1
+git log --oneline
+
+#!markdown
+
+> Het klinkt een beetje verwarrend dat je _git **add**_ gebruikt voor een verwijderd bestand, maar vergeet niet dat je alle wijzigingen staged met `git add` en ook verwijderen is een wijziging natuurlijk.
+
+#!markdown
+
+👉 In de log zie je een commit dat het bestand is verwijderd.
+
+> Dit geeft dus mooi aan hoe belangrijk het is om goede commit berichten te maken. :smile: 
+
+Mocht de commit niet duidelijk zijn qua omschrijving kun je git show gebruiken met het commit id:
+
+```bash
+git show "commit ID"
+```
+
+Dan zie je bijvoorbeeld dit:
+
+```bash
+Author: Ome Henk <OmeHenk@biggenveen.nl>
+Date:   Wed Sep 10 20:35:00 2025 +0200
+
+    verwijder script.ps1
+
+diff --git a/script.ps1 b/script.ps1
+deleted file mode 100644
+index 9ebbbad..0000000
+```
+
+Om dit specifieke bestand terug te halen vanuit de commit vóór de verwijdering gebruik je:
+
+```bash
+git restore --source=HEAD~1 script.ps1
+```
+
+Let wel, dit is als je niet nog commits daarna gedaan hebt natuurlijk.
+
+Daarmee haal je de versie van één commit terug uit de geschiedenis.  
+
+**Vergeet niet opnieuw te committen om het herstel vast te leggen.**
+
+#!markdown
+
+## Oefening 3: Veranderingen uit een oudere commit terughalen met cherry-pick
+
+#!markdown
+
+Soms wil je **één specifieke commit** opnieuw toepassen, bijvoorbeeld uit een andere branch of eerder in de geschiedenis.
+
+#!pwsh
+
+# Voeg een bestand toe en commit
+Set-Content -Path 'C:\GitTraining\notes.txt' -Value "Eerste versie notities"
+git add notes.txt
+git commit -m "Voeg notes.txt toe"
+
+# Pas het bestand aan en commit
+Add-Content -Path 'C:\GitTraining\notes.txt' -Value "`nTweede versie notities"
+git add notes.txt
+git commit -m "Tweede commit op notes.txt"
+
+#!markdown
+
+👉 Stel je wilt nu die tweede commit (met de extra regel) opnieuw toepassen, bijvoorbeeld na een reset.  
+
+Zoek eerst het commit-ID met `git log --oneline`.  
+Gebruik daarna:
+
+```bash
+git cherry-pick <commit-id>
+```
+
+Dit brengt de inhoud van die commit opnieuw aan bovenop je huidige branch.
+
+#!markdown
+
+## Oefening 4: Vergelijken en samenvoegen
+
+#!markdown
+
+Naast terugzetten en cherry-picken kun je ook wijzigingen **selectief samenvoegen** of vergelijken.
+
+- `git diff HEAD~1` → toon wat er in de laatste commit is veranderd.  
+- `git diff HEAD~2` → toon wat er sinds twee commits terug is veranderd.  
+- `git show <commit-id>` → toon wat er in een bepaalde commit veranderd is.  
+
+👉 Gebruik deze commando’s regelmatig tijdens je werk, zodat je altijd weet **waar je staat en wat je gaat committen**.
+
+#!markdown
+
+## Visualisaties
+
+#!markdown
+
+### Restore van bestand
+```mermaid
+flowchart LR
+  WC[Working Copy] -- git restore --> C[(Commit versie)]
+```
+
+### Cherry-pick voorbeeld
+
+```mermaid
+flowchart LR
+  C1[C1]
+  C2[C2]
+  C3[C3]
+  C4[C4]
+  C5[C5 cherry picked C2]
+
+  C1 --> C2 --> C3 --> C4 --> C5
+  C2 --> C5
+```
+
+#!markdown
+
+## Samenvatting gebruikte Git-commando's
+
+#!markdown
+
+| Commando | Uitleg |
+|----------|--------|
+| `git restore <bestand>` | Zet een bestand terug naar de versie van de laatste commit. |
+| `git restore --source=HEAD~1 <bestand>` | Zet bestand terug naar een eerdere commit (hier: één commit terug). |
+| `git log --oneline` | Toon commitgeschiedenis compact met commit-ID’s. |
+| `git diff` | Bekijk verschillen tussen working copy en staging/laatste commit. |
+| `git diff HEAD~1` | Bekijk verschillen tussen huidige toestand en één commit terug. |
+| `git show <commit-id>` | Toon details en wijzigingen van een specifieke commit. |
+| `git cherry-pick <commit-id>` | Pas de wijzigingen uit één specifieke commit opnieuw toe. |
+
+#!markdown
+
+## === Einde les 4 ===
