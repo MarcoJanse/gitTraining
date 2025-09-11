@@ -110,7 +110,7 @@ git log --oneline
 Mocht de commit niet duidelijk zijn qua omschrijving kun je git show gebruiken met het commit id:
 
 ```bash
-git show "commit ID"
+git show "<commit ID>"
 ```
 
 Dan zie je bijvoorbeeld dit:
@@ -140,36 +140,69 @@ Daarmee haal je de versie van één commit terug uit de geschiedenis.
 
 #!markdown
 
-## Oefening 3: Veranderingen uit een oudere commit terughalen met cherry-pick
+## Oefening 3: Een oudere commit opnieuw toepassen met cherry-pick
 
 #!markdown
 
-Soms wil je **één specifieke commit** opnieuw toepassen, bijvoorbeeld uit een andere branch of eerder in de geschiedenis.
+Soms wil je **één specifieke commit** opnieuw toepassen, bijvoorbeeld omdat daar de juiste versie van een bestand stond die later per ongeluk is overschreven.  
+Met `git cherry-pick` kun je die commit opnieuw bovenop je huidige branch zetten.  
+
+#!markdown
+
+### Stappen
+
+#!markdown
+
+1. Maak een bestand `notes.txt` en commit dit met een eerste inhoud.
 
 #!pwsh
 
-# Voeg een bestand toe en commit
 Set-Content -Path 'C:\GitTraining\notes.txt' -Value "Eerste versie notities"
 git add notes.txt
 git commit -m "Voeg notes.txt toe"
 
-# Pas het bestand aan en commit
+#!markdown
+
+2. Voeg daarna extra regels toe en commit weer.  
+
+#!pwsh
+
 Add-Content -Path 'C:\GitTraining\notes.txt' -Value "`nTweede versie notities"
 git add notes.txt
 git commit -m "Tweede commit op notes.txt"
 
 #!markdown
 
-👉 Stel je wilt nu die tweede commit (met de extra regel) opnieuw toepassen, bijvoorbeeld na een reset.  
+3. Maak expres een “foute” wijziging en commit ook die.
 
-Zoek eerst het commit-ID met `git log --oneline`.  
-Gebruik daarna:
+#!pwsh
 
-```bash
-git cherry-pick <commit-id>
-```
+Set-Content -Path 'C:\GitTraining\notes.txt' -Value "Oeps, verkeerde inhoud"
+git add notes.txt
+git commit -m "Foute wijziging"
 
-Dit brengt de inhoud van die commit opnieuw aan bovenop je huidige branch.
+#!markdown
+
+4. Stel dat je de tweede commit (met de goede inhoud) opnieuw wilt toepassen:  
+   - Bekijk de log met `git log --oneline` en noteer het commit-ID van de “goede commit”.  
+   - Voer uit:  
+     ```bash
+     git cherry-pick <commit-id>
+     ```  
+   - Nu wordt de oude wijziging opnieuw toegepast bovenop je huidige HEAD.  
+
+5. Controleer met `git log` dat er een nieuwe commit is bijgekomen die dezelfde inhoud terugzet.
+
+#!markdown
+
+### Visualisatie
+
+#!markdown
+
+```mermaid
+flowchart LR
+  C1[C1: notes.txt eerste versie] --> C2[C2: extra regels] --> C3[C3: foute wijziging] --> C4[C4: cherry-picked C2]
+  C2 -. opnieuw toegepast .-> C4
 
 #!markdown
 
@@ -226,6 +259,38 @@ flowchart LR
 | `git diff HEAD~1` | Bekijk verschillen tussen huidige toestand en één commit terug. |
 | `git show <commit-id>` | Toon details en wijzigingen van een specifieke commit. |
 | `git cherry-pick <commit-id>` | Pas de wijzigingen uit één specifieke commit opnieuw toe. |
+
+#!markdown
+
+## Praktijkopdracht
+
+#!markdown
+
+1. Maak een nieuw tekstbestand aan in je repo (bijv. experiment.txt) en commit dit met een eerste inhoud.
+   1. Controleer in de log of de commit erbij staat.
+2. Pas het bestand expres verkeerd aan (zet er iets geks of foutiefs in).
+   1. Gebruik daarna Git om dit bestand terug te zetten naar de laatste commit, zodat de fout verdwijnt.
+3. Verwijder het bestand en commit die verwijdering.
+   1. Gebruik daarna Git om het bestand terug te halen uit de commit vóór de verwijdering en commit dit herstel.
+4. Maak nog een extra bestand (bijv. notes.txt) en commit dat.
+   1. Voeg nog een wijziging toe en commit opnieuw.
+   2. Gebruik de log om de commit-ID’s van deze wijzigingen te bekijken.
+5.  Gebruik cherry-pick om één van de commits op notes.txt opnieuw toe te passen bovenop je huidige branch.
+    1.  Controleer daarna in de log dat dezelfde wijziging nu twee keer voorkomt (origineel + cherry-pick).
+6.  Gebruik diff en show om de verschillen tussen je laatste commits te bekijken:
+    1.  Vergelijk je huidige HEAD met de vorige commit.
+    2.  Toon de inhoud van een bestand uit een eerdere commit.
+
+#!markdown
+
+### Zelfcontrole
+
+#!markdown
+
+- [ ] Heb je een bestand hersteld naar de laatste commit met restore?
+- [ ] Heb je een verwijderd bestand teruggehaald uit een eerdere commit?
+- [ ] Heb je een specifieke commit opnieuw toegepast met cherry-pick?
+- [ ] Kun je met git log, git diff en git show uitleggen wat er is veranderd?
 
 #!markdown
 

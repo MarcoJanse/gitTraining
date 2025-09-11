@@ -138,4 +138,29 @@ git commit -m "Feature-y: tweede regel"
 
 #!markdown
 
+## Praktijkopdracht
+
+#!markdown
+
+1. Maak een nieuwe branch aan met een logische naam, bijvoorbeeld feature-branch.
+   1. Controleer met git branch of deze branch nu in de lijst staat.
+2. Schakel over naar je nieuwe branch.
+   1. Controleer je status (git status) en let op de branchnaam.
+3. Voeg een nieuw bestand toe (bijvoorbeeld feature.txt) met wat tekst erin.
+   1. Stage en commit dit bestand op de nieuwe branch.
+4. Controleer de geschiedenis:
+   1. Bekijk de log compact (git log --oneline --decorate).
+   2. Let op dat jouw nieuwe commit alleen op de branch staat en nog niet op main.
+5.  Schakel terug naar main.
+    1.  Kijk of je bestand feature.txt zichtbaar is of niet.
+    2.  Dit laat zien dat je werk op een branch gescheiden blijft van main.
+6. Maak op main een ander bestand (bijvoorbeeld main.txt) en commit dit.
+    1.  Zo ontstaat er een verschil tussen de branches.
+    2.  Bekijk nu de log opnieuw (git log --oneline --decorate).
+7.  Herken de commits die exclusief bij feature-branch horen en die bij main.
+
+**Extra:** Kijk wat er met je bestanden gebeurd in file explorer als je wisselt tussen branches! It's magic!!! :smile:
+
+#!markdown
+
 ## _Einde les 01_
