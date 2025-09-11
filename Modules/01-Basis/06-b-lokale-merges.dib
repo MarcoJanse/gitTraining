@@ -17,6 +17,96 @@ Gebruik `git log --oneline --decorate` om voor en na te vergelijken.
 
 #!markdown
 
+## Merges
+
+#!markdown
+
+### Voorbeeldsituatie (referentie)
+
+We gebruiken deze voorbeeldrepository:
+
+- Basistak (waar je in merge’t), bv. main
+- Te mergen tak (feature-branch)
+- De feature-branch is gemaakt op commit 2 en bevat 1,2,A,B,C
+- De basistak heeft daarna 3,4,5 gekregen. 
+
+#### Startpunt (schets):
+
+```mermaid
+flowchart LR
+  1((1)) --> 2((2)) --> 3((3)) --> 4((4)) --> 5((5))
+  2 --> A((A)) --> B((B)) --> C((C))
+```
+
+#### Standaard merge (no-ff)
+
+Een standaard merge neemt elke commit van de te mergen branch en voegt die toe aan de geschiedenis van de basistak op basis van hun tijdstempel. Er komt ook een merge-commit bij (een “lege” commit die het merge-moment markeert). Dit heet ook wel no fast-forward (--no-ff). 
+pr0mpt.com
+
+Visualisatie:
+
+```mermaid
+flowchart LR
+  C1((1)) --> C2((2)) --> C3((3)) --> C4((4)) --> C5((5)) --> M((merge))
+  C2 --> A((A)) --> B((B)) --> C((C)) --> M
+```
+
+- Voordelen (kort): rijke, contextvolle historie; je ziet precies wanneer branches ontstonden en wat erin zat.
+- Nadelen: extra merge-commits kunnen “rommelig” ogen; het terugdraaien van een set changes kan verwarrend zijn. 
+
+
+**Voorbeeldcommando’s:**
+
+- `git checkout main`
+- `git merge --no-ff feature`
+
+
+#### Fast-forward merge
+
+Als de basistak geen nieuwe commits heeft sinds de feature-branch afsplitsing, kan Git een fast-forward doen: de branchpointer schuift vooruit, zonder merge-commit. Het lijkt dan alsof de commits rechtstreeks op de basistak gemaakt zijn. 
+pr0mpt.com
+
+Visualisatie (lineair):
+
+```mermaid
+flowchart LR
+  1((1)) --> 2((2)) --> A((A)) --> B((B)) --> C((C))
+```
+
+- Voordelen: zeer schone, lineaire historie; geen verlies aan detail.
+- Nadelen: kan de “branching-context” verhullen; werkt alleen als de basistak niet doorliep. 
+
+Voorbeeldcommando:
+
+
+- `git checkout main`
+- `git merge --ff-only feature`
+
+
+#### Rebase and merge
+
+Rebase + merge verplaatst het startpunt van de feature-branch naar de laatste commit van de basistak en speelt daarna A,B,C erbovenop af. Je krijgt zo een lineaire geschiedenis, ook al had de basistak nieuwe commits. Het uiteindelijke mergen is daarna vaak een fast-forward. 
+
+Visualisatie (lineair na rebase):
+
+```mermaid
+flowchart LR
+  1((1)) --> 2((2)) --> 3((3)) --> 4((4)) --> 5((5)) --> A((A')) --> B((B')) --> C((C'))
+```
+
+- Voordelen: lineaire geschiedenis met behoud van commit-granulariteit.
+- Nadelen: kan opnieuw nodig zijn als de basistak wéér verandert; minder zichtbaar wanneer de branch bestond; herkomst per PR/branch kan minder duidelijk zijn. 
+
+
+Voorbeeldcommando’s:
+
+- `git checkout feature`
+- `git rebase main`
+- `git checkout main`
+- `git merge feature`
+
+#!markdown
+
 ## Oefening 1: Fast-forward merge
 
 #!pwsh
@@ -92,7 +182,6 @@ flowchart LR
 
 #!markdown
 
-```markdown
 | Commando | Uitleg |
 |----------|--------|
 | `git switch <branch>` | Schakel van branch. |
@@ -102,4 +191,36 @@ flowchart LR
 | `git log --oneline --decorate` | Vergelijk historie voor/na de merge. |
 | `git add <bestand>` | Stage wijzigingen. |
 | `git commit -m "bericht"` | Commit wijzigingen (ook de merge-resolutie). |
-```
+
+#!markdown
+
+## Praktijkopdracht
+
+#!markdown
+
+1.  Fast-forward merge
+    1.  Maak een nieuwe branch vanaf main.
+    2. Voeg een bestand toe of wijzig iets, en commit dit.
+    3. Ga terug naar main en merge de branch.
+    4. Observeer dat dit een fast-forward merge is (geen merge commit, de branchpointer schuift gewoon vooruit).
+ 2. Merge met een merge commit
+    1. Maak opnieuw een branch vanaf main.
+    2. Doe op de branch een commit (bijv. een bestand toevoegen).
+    3. Doe ook op main een andere commit.
+    4. Merge de branch in main
+    5. Observeer dat dit een merge commit oplevert.
+3.  Optioneel: geforceerde merge commit
+    1.  Maak een branch, doe commits.
+    2.  Merge in main met git merge --no-ff <branch>.
+    3.  Observeer dat er altijd een merge commit ontstaat, zelfs als fast-forward mogelijk was.
+
+### Extra
+
+4. Conflicten (optioneel als extra uitdaging)
+   1. Maak twee branches van dezelfde commit.
+   2. Pas in beide branches hetzelfde bestand en dezelfde regel aan.
+   3. Merge ze samen en los het conflict handmatig op.
+
+#!markdown
+
+## _Einde les 06_
