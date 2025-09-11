@@ -167,7 +167,7 @@ git commit -m "Voeg notes.txt toe"
 
 #!pwsh
 
-Add-Content -Path 'C:\GitTraining\notes.txt' -Value "`nTweede versie notities"
+Add-Content -Path 'C:\GitTraining\notes.txt' -Value "Tweede versie notities"
 git add notes.txt
 git commit -m "Tweede commit op notes.txt"
 
